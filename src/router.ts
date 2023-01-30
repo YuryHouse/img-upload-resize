@@ -1,8 +1,5 @@
-import { fileURLToPath } from "url";
-
-const express = require('express');
-const app = express();
-const path = require('path');
+import express from "express";
+import path from "path";
 
 const router = express.Router();
 const upload = require('./uploadMiddleware');
@@ -19,7 +16,9 @@ router.post('/post', upload.single('image'), async function (req: any, res: any)
         res.status(401).json({error: 'Please provide an image'});
     }
     const filename = await fileUpload.save(req.file.buffer);
-    return res.status(200).json({ name: filename, path: imagePath });
+    const staticPath = 'http://localhost:8000/static/images/';
+    const imgHostPath = staticPath + filename
+    return res.status(200).json({ name: filename, path: imgHostPath });
 });
 
 module.exports = router;
